@@ -1,0 +1,48 @@
+<html>
+
+<head>
+    <script>
+        function deleteTodo(id) {
+            const requestOptions = {
+                method: "DELETE",
+            };
+
+            fetch("/todos/" + id, requestOptions)
+                .then((response) => {
+                    if (response.status === 204) {
+                        alert("Todoを削除しました");
+                        location.reload();
+                    } else {
+                        alert("エラー: Todoの削除に失敗しました");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+        }
+    </script>
+</head>
+
+<body>
+    <p>一覧に戻る</p>
+    <form role="form" action="/todos" method="POST">
+        <div class="lead">Todo作成</div>
+        <div class="form-group">
+            <textarea class="form-control" name="content" id="content" placeholder="Todoを追加" rows="4"></textarea>
+            <br />
+            <br />
+            <button class="btn btn-lg btn-primary pull-right" type="submit">
+                作成
+            </button>
+        </div>
+    </form>
+
+    <hr />
+    {{ range .todos }}
+    <p><a href="/todos/{{.ID}}">{{ .ID }}: {{ .Content }}</a></p>
+    <a href="#" onclick='deleteTodo({{ .ID }})'>[削除]</a>
+
+    {{ end }}
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+<html>
+  <h1></h1>
+  <form role="form" id="updateForm">
+    <div class="lead">Todos更新: {{.todo.ID}}</div>
+    <div class="form-group">
+      <textarea
+        class="form-control"
+        name="content"
+        id="content"
+        placeholder="Todoを更新"
+        rows="4"
+      >
+{{.todo.Content}}</textarea
+      >
+      <br />
+      <br />
+      <button class="btn btn-lg btn-primary pull-right" type="submit">
+        更新
+      </button>
+    </div>
+  </form>
+
+  <script>
+    document
+      .getElementById("updateForm")
+      .addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const content = document.getElementById("content").value;
+        const id = "{{.todo.ID}}";
+        const url = "/todos/" + id;
+
+        fetch(url, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `content=${encodeURIComponent(content)}`,
+        })
+          .then((response) => {
+            if (response.ok) {
+                alert("更新に成功しました。");
+                window.location.href = "/todos"; // 成功した場合、リダイレクト先を設定
+            } else {
+              console.error("更新に失敗しました。", response.status);
+            }
+          })
+          .catch((error) => {
+            console.error("エラーが発生しました。", error);
+          });
+      });
+  </script>
+
+  <hr />
+</html>
